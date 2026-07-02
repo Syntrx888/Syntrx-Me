@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Syntrx-Me</title>
+  <meta name="description" content="Syntrx 的个人主页 — 热爱 Vibe Coding、AI Agent、Linux 与 Minecraft 的开发者。">
+  <meta name="keywords" content="Syntrx, Vibe Coding, Agent, Linux, Debian, Server, Minecraft, Developer">
+  <link rel="canonical" href="https://www.syntrx.top">
+  <link rel="sitemap" type="application/xml" href="/sitemap.xml">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.syntrx.top">
+  <meta property="og:title" content="Syntrx — Vibe Coding · Agent · Linux · Minecraft">
+  <meta property="og:description" content="Syntrx 的个人主页 — 热爱 Vibe Coding、AI Agent、Linux 与 Minecraft 的开发者。">
+  <meta property="og:image" content="https://img.fastmirror.net/s/2026/07/02/6a45dbaca80b1.jpg">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Syntrx">
+  <meta name="twitter:description" content="Syntrx 的个人主页">
+  <link rel="icon" type="image/jpeg" href="https://img.fastmirror.net/s/2026/07/02/6a45dbaca80b1.jpg">
+  <link rel="apple-touch-icon" href="https://img.fastmirror.net/s/2026/07/02/6a45dbaca80b1.jpg">
+  <link rel="preconnect" href="https://fonts.loli.net" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.loli.net/css2?family=Inter:wght@400;500;700&display=swap" as="style">
+  <link href="https://fonts.loli.net/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+      background: #FAFAF9;
+      color: #1C1917;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    :root {
+      --bg: #FAFAF9;
+      --bg-elevated: #FFFFFF;
+      --text-primary: #1C1917;
+      --text-secondary: #78716C;
+      --text-tertiary: #A8A29E;
+      --border: #E7E5E4;
+      --border-light: #F5F5F4;
+      --accent: #292524;
+      --accent-soft: rgba(41,37,36,0.06);
+      --nav-blur: 48px;
+      --section-py: clamp(48px, 8vw, 96px);
+      --content-max: 1200px;
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* ===== NAVBAR ===== */
+    .navbar {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      padding: 12px 28px;
+      background: rgba(255,255,255,0.35);
+      backdrop-filter: blur(var(--nav-blur));
+      -webkit-backdrop-filter: blur(var(--nav-blur));
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 100px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02);
+      max-width: calc(100% - 40px);
+      transition: background 0.4s, box-shadow 0.4s;
+    }
+    .navbar.scrolled {
+      background: rgba(255,255,255,0.88);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.03);
+    }
+    .nav-logo {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+      color: var(--text-primary);
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      list-style: none;
+    }
+    .nav-links a {
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      border-radius: 100px;
+      transition: color 0.25s, background 0.25s;
+      white-space: nowrap;
+    }
+    .nav-links a:hover {
+      color: var(--text-primary);
+      background: var(--accent-soft);
+    }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      z-index: 501;
+    }
+    .hamburger span {
+      display: block;
+      width: 20px;
+      height: 1.5px;
+      background: var(--text-primary);
+      border-radius: 2px;
+      transition: transform 0.4s var(--ease-out), opacity 0.3s;
+      transform-origin: center;
+    }
+    .hamburger.active span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+    /* Mobile fullscreen nav */
+    .mobile-nav-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 499;
+      background: rgba(250,250,249,0.95);
+      backdrop-filter: blur(32px);
+      -webkit-backdrop-filter: blur(32px);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      opacity: 0;
+      transition: opacity 0.4s var(--ease-out);
+    }
+    .mobile-nav-overlay.active {
+      display: flex;
+      opacity: 1;
+    }
+    .mobile-nav-overlay a {
+      font-size: 28px;
+      font-weight: 600;
+      color: var(--text-primary);
+      padding: 12px 24px;
+      border-radius: 12px;
+      transition: background 0.25s, transform 0.25s, opacity 0.4s var(--ease-out);
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    .mobile-nav-overlay.active a {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .mobile-nav-overlay.active a:nth-child(1) { transition-delay: 0.08s; }
+    .mobile-nav-overlay.active a:nth-child(2) { transition-delay: 0.12s; }
+    .mobile-nav-overlay.active a:nth-child(3) { transition-delay: 0.16s; }
+    .mobile-nav-overlay.active a:nth-child(4) { transition-delay: 0.20s; }
+    .mobile-nav-overlay a:hover { background: var(--accent-soft); }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .navbar {
+        left: auto;
+        right: 12px;
+        top: 12px;
+        transform: none;
+        padding: 14px 20px;
+        background: rgba(255,255,255,0.25);
+        backdrop-filter: blur(64px);
+        -webkit-backdrop-filter: blur(64px);
+        border: 1px solid rgba(255,255,255,0.15);
+        max-width: auto;
+      }
+      .hamburger span {
+        width: 20px;
+        height: 2px;
+      }
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      position: relative;
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 0 24px;
+    }
+
+    /* Watermark background */
+    .hero-watermark {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.05;
+    }
+    .hero-watermark-row {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      white-space: nowrap;
+      line-height: 2.2;
+      flex-shrink: 0;
+    }
+    .hero-watermark-row span {
+      font-size: clamp(18px, 3vw, 36px);
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      color: var(--text-primary);
+      user-select: none;
+    }
+
+    .hero-content {
+      position: relative;
+      text-align: center;
+      z-index: 10;
+    }
+    .hero-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--text-tertiary);
+      margin-bottom: 24px;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.8s var(--ease-out) 0.2s forwards;
+    }
+
+    /* English + Chinese stacked */
+    .hero-title-wrapper {
+      display: inline-block;
+    }
+    .hero-title-en {
+      font-size: clamp(40px, 9vw, 100px);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      color: var(--text-primary);
+      white-space: nowrap;
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    .hero-title-en.floated {
+      animation: fadeUp 0.8s var(--ease-out) 0.35s forwards,
+                 heroFloat 5s cubic-bezier(0.37, 0, 0.63, 1) 1.2s infinite;
+    }
+
+    .hero-subtitle {
+      margin-top: 28px;
+      font-size: clamp(14px, 2vw, 17px);
+      font-weight: 400;
+      color: var(--text-secondary);
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.8s var(--ease-out) 0.5s forwards;
+    }
+    .hero-hint {
+      margin-top: 48px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-tertiary);
+      letter-spacing: 0.1em;
+      opacity: 0;
+      animation: fadeUp 0.8s var(--ease-out) 0.7s forwards;
+      transition: opacity 0.3s;
+    }
+    .hero-hint .arrow {
+      display: inline-block;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(4px); }
+    }
+    @keyframes heroFloat {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      25% { transform: translateY(-8px) rotate(1.5deg); }
+      50% { transform: translateY(-3px) rotate(-1deg); }
+      75% { transform: translateY(-9px) rotate(1deg); }
+    }
+
+    /* ===== SECTIONS ===== */
+    .section {
+      padding: var(--section-py) 24px;
+      max-width: var(--content-max);
+      margin: 0 auto;
+    }
+    .section-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--text-tertiary);
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .section-desc {
+      font-size: 16px;
+      color: var(--text-secondary);
+      max-width: 520px;
+      line-height: 1.7;
+      margin-bottom: 48px;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== SKILLS ===== */
+    .skills-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .skill-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      transition: all 0.3s var(--ease-out);
+      white-space: nowrap;
+    }
+    .skill-tag:hover {
+      color: var(--text-primary);
+      border-color: var(--text-tertiary);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+    }
+    .skill-tag svg {
+      width: 16px;
+      height: 16px;
+      opacity: 0.6;
+      flex-shrink: 0;
+    }
+
+    /* ===== WORKS ===== */
+    .works-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+    @media (min-width: 768px) {
+      .works-grid { grid-template-columns: repeat(2, 1fr); }
+      .work-card:first-child { grid-column: 1 / -1; }
+    }
+    .work-card {
+      position: relative;
+      padding: 32px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      transition: all 0.4s var(--ease-out);
+      overflow: hidden;
+    }
+    .work-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+    }
+    .work-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.03);
+      border-color: var(--text-tertiary);
+    }
+    .work-icon {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent-soft);
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+    .work-icon svg {
+      width: 22px;
+      height: 22px;
+      color: var(--text-primary);
+    }
+    .work-title {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 10px;
+    }
+    .work-desc {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+    .work-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      padding: 8px 16px;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      transition: all 0.3s var(--ease-out);
+    }
+    .work-link:hover {
+      background: var(--text-primary);
+      color: var(--bg);
+      border-color: var(--text-primary);
+    }
+    .work-link svg {
+      width: 14px;
+      height: 14px;
+      transition: transform 0.3s var(--ease-out);
+    }
+    .work-link:hover svg { transform: translateX(2px); }
+
+    /* ===== CONTACT ===== */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+    @media (min-width: 768px) {
+      .contact-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .contact-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--border);
+      margin-bottom: 24px;
+    }
+    .contact-name {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+    }
+    .contact-handle {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      color: var(--text-tertiary);
+      margin-bottom: 20px;
+    }
+    .contact-bio {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      max-width: 400px;
+    }
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 20px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      transition: all 0.3s var(--ease-out);
+    }
+    .contact-link:hover {
+      border-color: var(--text-tertiary);
+      transform: translateX(4px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.03);
+    }
+    .contact-link-icon {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--accent-soft);
+      border-radius: 10px;
+      flex-shrink: 0;
+    }
+    .contact-link-icon svg {
+      width: 20px;
+      height: 20px;
+      color: var(--text-primary);
+    }
+    .contact-link-text {
+      display: flex;
+      flex-direction: column;
+    }
+    .contact-link-label {
+      font-size: 12px;
+      color: var(--text-tertiary);
+      font-weight: 500;
+    }
+    .contact-link-value {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      text-align: center;
+      padding: 40px 24px;
+      border-top: 1px solid var(--border-light);
+      font-size: 13px;
+      color: var(--text-tertiary);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <a href="#" class="nav-logo">Syntrx-Me</a>
+    <ul class="nav-links">
+      <li><a href="#about">关于</a></li>
+      <li><a href="#skills">技能</a></li>
+      <li><a href="#works">作品</a></li>
+      <li><a href="#contact">联系</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="菜单">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile Nav -->
+  <div class="mobile-nav-overlay" id="mobileNav">
+    <a href="#about">关于</a>
+    <a href="#skills">技能</a>
+    <a href="#works">作品</a>
+    <a href="#contact">联系</a>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero" id="hero">
+    <!-- Watermark background -->
+    <div class="hero-watermark" id="heroWatermark"></div>
+
+    <div class="hero-content">
+      <p class="hero-eyebrow">Developer · Creator · Explorer</p>
+      <div class="hero-title-wrapper" id="heroTitleWrapper">
+        <div class="hero-title-en" id="heroEn">Hello, I'm Syntrx</div>
+      </div>
+      <p class="hero-subtitle">用代码、好奇心和对开源的热爱，创造有意义的数字体验。</p>
+      <p class="hero-hint" id="heroHint"><span class="arrow">↓</span> About Me</p>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="section reveal" id="about">
+    <p class="section-eyebrow">About</p>
+    <h2 class="section-title">关于我</h2>
+    <p class="section-desc">
+      你好，我是 Syntrx。一个热爱构建有趣事物的开发者。
+      运行服务器、编写工具、探索技术与创造力的交汇点。
+    </p>
+  </section>
+
+  <!-- Skills -->
+  <section class="section reveal" id="skills">
+    <p class="section-eyebrow">Expertise</p>
+    <h2 class="section-title">技能 & 工具</h2>
+    <p class="section-desc">日常使用的技术栈和领域。</p>
+    <div class="skills-grid">
+      <span class="skill-tag">
+        <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M200 56L56 200"/><path d="M144 56h56v56"/></svg>
+        Vibe Coding
+      </span>
+      <span class="skill-tag">
+        <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><circle cx="128" cy="96" r="64"/><path d="M180 156l40 60"/><path d="M76 156l-40 60"/></svg>
+        Agent
+      </span>
+      <span class="skill-tag">
+        <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="128" cy="140" rx="56" ry="68"/><path d="M128 72c-24 0-36-20-36-44h72c0 24-12 44-36 44z"/><circle cx="108" cy="120" r="6"/><circle cx="148" cy="120" r="6"/></svg>
+        Linux
+      </span>
+      <span class="skill-tag">
+        <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><circle cx="128" cy="128" r="96"/><path d="M90 100a52 52 0 0 1 76 0"/><path d="M100 140a28 28 0 0 1 56 0"/></svg>
+        Debian
+      </span>
+      <span class="skill-tag">
+        <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><rect x="32" y="40" width="192" height="56" rx="8"/><rect x="32" y="128" width="192" height="56" rx="8"/><circle cx="72" cy="68" r="8"/><circle cx="72" cy="156" r="8"/><line x1="152" y1="68" x2="192" y2="68"/><line x1="152" y1="156" x2="192" y2="156"/></svg>
+        Server
+      </span>
+      <span class="skill-tag">
+        <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><rect x="48" y="48" width="160" height="160" rx="4"/><rect x="80" y="80" width="32" height="32"/><rect x="144" y="80" width="32" height="32"/><path d="M96 152h64"/><path d="M104 152v20"/><path d="M152 152v20"/></svg>
+        Minecraft
+      </span>
+      <span class="skill-tag">
+        <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><polyline points="168 40 216 88 168 136"/><polyline points="88 136 40 88 88 40"/><line x1="148" y1="216" x2="108" y2="40"/></svg>
+        Web 开发
+      </span>
+      <span class="skill-tag">
+        <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><polygon points="128,24 40,40 128,216 216,40"/><line x1="88" y1="40" x2="128" y2="112"/><line x1="168" y1="40" x2="128" y2="112"/></svg>
+        Vue.js
+      </span>
+      <span class="skill-tag">
+        <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M128 24L24 72v112l104 48 104-48V72z"/><path d="M128 120v112"/><path d="M24 72l104 48 104-48"/></svg>
+        Node.js
+      </span>
+      <span class="skill-tag">
+        <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><rect x="24" y="100" width="208" height="80" rx="8"/><rect x="56" y="68" width="24" height="24"/><rect x="88" y="68" width="24" height="24"/><rect x="120" y="68" width="24" height="24"/><rect x="152" y="68" width="24" height="24"/><path d="M184 88h24a16 16 0 0 1 16 16v0"/></svg>
+        Docker
+      </span>
+      <span class="skill-tag">
+        <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><circle cx="80" cy="64" r="16"/><circle cx="176" cy="128" r="16"/><circle cx="80" cy="192" r="16"/><line x1="80" y1="80" x2="80" y2="176"/><path d="M80 144l72-16"/></svg>
+        Git
+      </span>
+      <span class="skill-tag">
+        <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M64 176a48 48 0 0 1-8-95.6A64 64 0 0 1 183.2 64 40 40 0 0 1 200 144h8a32 32 0 0 1 0 64H64a28 28 0 0 1 0-56z"/></svg>
+        自托管
+      </span>
+    </div>
+  </section>
+
+  <!-- Works -->
+  <section class="section reveal" id="works">
+    <p class="section-eyebrow">Selected Works</p>
+    <h2 class="section-title">个人作品</h2>
+    <p class="section-desc">我构建和发布过的项目。</p>
+    <div class="works-grid">
+      <div class="work-card">
+        <div class="work-icon">
+          <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><rect x="48" y="48" width="160" height="160" rx="4"/><rect x="80" y="80" width="32" height="32"/><rect x="144" y="80" width="32" height="32"/><path d="M96 152h64"/><path d="M104 152v20"/><path d="M152 152v20"/></svg>
+        </div>
+        <h3 class="work-title">夜枫听雨｜AcerainServer</h3>
+        <p class="work-desc">
+          融合生存生活、都市建造、自由创造与小游戏的多元化 Minecraft 服务器。既有原汁原味的生存陪伴——和朋友一起挖矿、种田、盖房子，在星空下聊到天亮；也有精心规划的现代都市——高楼林立，霓虹闪烁。不追求肝，不追求卷，是一个让你慢下来、认真生活的地方。
+        </p>
+        <a href="https://yfty.syntrx.top" target="_blank" rel="noopener" class="work-link">
+          访问官网
+          <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="40" y1="128" x2="216" y2="128"/><polyline points="144 56 216 128 144 200"/></svg>
+        </a>
+      </div>
+      <div class="work-card">
+        <div class="work-icon">
+          <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M216 128a88 88 0 1 1-88-88h88z"/><path d="M216 40v48h-48"/></svg>
+        </div>
+        <h3 class="work-title">ChatterBox</h3>
+        <p class="work-desc">
+          简洁优雅的实时聊天室应用，采用 Vue + Node.js/Express + Socket.io 构建。支持实时消息推送、多房间切换，界面干净清爽。
+        </p>
+        <a href="https://github.com/Syntrx888/ChatterBox" target="_blank" rel="noopener" class="work-link">
+          查看 GitHub
+          <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="40" y1="128" x2="216" y2="128"/><polyline points="144 56 216 128 144 200"/></svg>
+        </a>
+      </div>
+      <div class="work-card">
+        <div class="work-icon">
+          <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M88 88l80-56"/><path d="M168 32l56 56-96 136-56-56z"/><line x1="80" y1="152" x2="104" y2="176"/></svg>
+        </div>
+        <h3 class="work-title">Syntrx Blog</h3>
+        <p class="work-desc">
+          个人博客与播客，记录技术探索、生活随想与创作灵感。分享关于 Linux、开发、Minecraft 服务器运维等内容。
+        </p>
+        <a href="https://blog.syntrx.top" target="_blank" rel="noopener" class="work-link">
+          访问博客
+          <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><line x1="40" y1="128" x2="216" y2="128"/><polyline points="144 56 216 128 144 200"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="section reveal" id="contact">
+    <p class="section-eyebrow">Contact</p>
+    <h2 class="section-title">联系我</h2>
+    <div class="contact-grid">
+      <div>
+        <img src="https://img.fastmirror.net/s/2026/07/02/6a45dbaca80b1.jpg" alt="Syntrx" class="contact-avatar" loading="lazy" fetchpriority="high">
+        <h3 class="contact-name">Syntrx</h3>
+        <p class="contact-handle">@Syntrx</p>
+        <p class="contact-bio">
+          开发者、服务器运营者、创造者。用代码和好奇心构建事物，始终保持对有趣对话和合作的开放态度。
+        </p>
+      </div>
+      <div class="contact-links">
+        <a href="https://github.com/Syntrx888" target="_blank" rel="noopener" class="contact-link">
+          <div class="contact-link-icon">
+            <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><path d="M128 8C64 8 12 60 12 124c0 52 34 96 80 112 6 1 8-3 8-6v-20c-32 7-39-16-39-16-5-14-13-17-13-17-10-7 1-7 1-7 12 1 18 12 18 12 10 18 27 12 34 9 1-7 4-12 7-14-26-3-53-13-53-58 0-13 5-23 12-32-1-3-5-15 1-31 0 0 10-3 32 12a110 110 0 0 1 58 0c22-15 32-12 32-12 6 16 2 28 1 31 8 9 12 19 12 32 0 46-28 55-54 58 4 3 8 10 8 20v30c0 3 2 7 8 6 46-16 80-60 80-112C244 60 192 8 128 8z"/></svg>
+          </div>
+          <div class="contact-link-text">
+            <span class="contact-link-label">GitHub</span>
+            <span class="contact-link-value">Syntrx888</span>
+          </div>
+        </a>
+        <a href="https://blog.syntrx.top" target="_blank" rel="noopener" class="contact-link">
+          <div class="contact-link-icon">
+            <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><circle cx="128" cy="128" r="96"/><line x1="2" y1="128" x2="254" y2="128"/><path d="M128 2a153 153 0 0 1 40 128 153 153 0 0 1-40 128 153 153 0 0 1-40-128A153 153 0 0 1 128 2z"/></svg>
+          </div>
+          <div class="contact-link-text">
+            <span class="contact-link-label">博客</span>
+            <span class="contact-link-value">blog.syntrx.top</span>
+          </div>
+        </a>
+        <a href="https://yfty.syntrx.top" target="_blank" rel="noopener" class="contact-link">
+          <div class="contact-link-icon">
+            <svg viewBox="0 0 256 256" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"><rect x="48" y="48" width="160" height="160" rx="4"/><rect x="80" y="80" width="32" height="32"/><rect x="144" y="80" width="32" height="32"/><path d="M96 152h64"/></svg>
+          </div>
+          <div class="contact-link-text">
+            <span class="contact-link-label">MC 服务器</span>
+            <span class="contact-link-value">yfty.syntrx.top</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>2026 Syntrx · 用热爱构建</p>
+  </footer>
+
+  <script>
+    /* ===== HERO WATERMARK ===== */
+    (function() {
+      const container = document.getElementById('heroWatermark');
+      const text = 'SYNTRX';
+      const rows = Math.max(12, Math.ceil(window.innerHeight / 50));
+      let html = '';
+      for (let r = 0; r < rows; r++) {
+        const offset = (Math.random() * 120 - 60).toFixed(0);
+        html += '<div class="hero-watermark-row" style="margin-left:' + offset + 'px">';
+        for (let c = 0; c < 10; c++) {
+          html += '<span>' + text + '</span>';
+        }
+        html += '</div>';
+      }
+      container.innerHTML = html;
+    })();
+
+    /* ===== HERO FLOAT ===== */
+    const heroEn = document.getElementById('heroEn');
+    setTimeout(() => { heroEn.classList.add('floated'); }, 400);
+
+    /* ===== NAVBAR SCROLL ===== */
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    /* ===== MOBILE NAV ===== */
+    const hamburger = document.getElementById('hamburger');
+    const mobileNav = document.getElementById('mobileNav');
+    const mobileLinks = mobileNav.querySelectorAll('a');
+
+    hamburger.addEventListener('click', () => {
+      const isOpen = mobileNav.classList.contains('active');
+      hamburger.classList.toggle('active');
+      mobileNav.classList.toggle('active');
+      document.body.style.overflow = isOpen ? '' : 'hidden';
+    });
+
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        hamburger.classList.remove('active');
+        mobileNav.classList.remove('active');
+        document.body.style.overflow = '';
+      });
+    });
+
+    /* ===== SCROLL REVEAL ===== */
+    const reveals = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    reveals.forEach(el => revealObserver.observe(el));
+  </script>
+</body>
+</html>
